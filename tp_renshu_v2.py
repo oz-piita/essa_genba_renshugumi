@@ -10,7 +10,7 @@ import pandas as pd
 import time
 import slackweb
 
-slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
 start = time.time()
 
 date_id="d1"
