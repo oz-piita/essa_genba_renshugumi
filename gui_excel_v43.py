@@ -62,10 +62,8 @@ def Clac_Menu(file_path, date_id, overlap, place, bikou):
     else:
         message += "\nバグがあります.システム担当者に連絡してください.\n"
     
-    print(cnt, failed, rejected_menus, message)
-
     message += "\n備考: " + bikou
-
+    print(message)
     text_kekka.insert(tk.END, message)
     return
 

@@ -71,10 +71,12 @@ def read_Form_Answer_sheet(file_path, week_id, date_id, members_name_list, start
     df_mem = pd.DataFrame(members_name_list).dropna(how="all").rename(columns={0:"name"})
     df_form_ans = pd.merge(df_mem, df_form_ans, on="name", how="left")
 
+    # 未回答者を欠席扱いにする
+    df_form_ans["At/Ab"] = df_form_ans["At/Ab"].fillna("欠席 or 未定")
+
     # 参加早退の空欄を参加→00:00と早退→23:59:00と埋める。ただし欠席は参加時刻＝早退時刻＝00:00とする。
     df_form_ans =  fill_join_and_move_out_time(df_form_ans)
 
-    print(df_form_ans)
 
     # 練習時刻と出欠回答結果をすり合わせ、メンバーの出席簿array_Attendanceをまとめる
     arr_A = create_array_Attendance(df_form_ans, start_time_list, lesson_minuete)
