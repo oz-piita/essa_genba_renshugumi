@@ -22,7 +22,7 @@
 
 # Usage(test)
 
-Requirementのうち、pulpは標準パッケージに含まれませんので、先に
+Requirementのうち、pulpは標準パッケージに含まれませんので、先にインストールしてください。
 
 実行方法は以下です。
 ```bash
@@ -48,7 +48,7 @@ pyinstaller --noconfirm --onefile --console --add-data "C:/Users/.../Lib/site-pa
 ```
 2つのpahtは、前者が"pythonフォルダ内のpulpフォルダへのパス;実行ファイル保存先のパス"、"後者がこのアプリケーションのパス"です。
 
-ythonフォルダ内のpulpフォルダへのパスは、以下のpythonコードを実行することでも確認できます。
+Pythonフォルダ内のpulpフォルダへのパスは、以下のpythonコードを実行することでも確認できます。
 ```pyhon
 import pulp
 print(pulp.__path__[0])
