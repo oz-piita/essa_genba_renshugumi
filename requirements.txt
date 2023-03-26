@@ -1,3 +1,0 @@
-tkinter 8.6
-pandas 1.2.4
-pulp

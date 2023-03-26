@@ -21,23 +21,22 @@ def read_05_parameter_sheet(file_path, date_id):
 
 # エクセルの読み込み2
 def read_df_up_sheet(file_path, date_id):
-    df_origin = pd.read_excel(file_path,sheet_name="csv01_",header=None)
+    df_origin = pd.read_excel(file_path,sheet_name="df_up",header=None)
 
     date_index = date_ids.index(date_id)
-    # 生のデータからd1(-7)に関するデータ整理のための整形
+    # 生のデータからd1(～7)に関するデータ整理のための整形
     # 0全練習　1全名前　2＋index(2)コマ名　9＋index各(3)パラミタ　16+index(4)need
     df_up = df_origin[[0, 1, 2+date_index, 9+date_index, 16+date_index]]
     df_up = df_up.rename(
         columns={2+date_index: 2, 9+date_index: 3, 16+date_index: 4})
     df_up = df_up.drop(df_up.index[[0]])
-    # 人、レッスン、授業コマの3軸のイメージ
-    menu_name_list = df_up.iloc[:, 0].dropna(how='all').values.tolist()
-    menu_name_list = [i for i in menu_name_list if i != ""]
-    members_name_list = df_up.iloc[:, 1].dropna(how='all').values.tolist()
-    members_name_list = [i for i in members_name_list if i != ""]
-    start_time_list = df_up[2].dropna(how='all').tolist()          # str型として先にリストにしておく。コマの名前
-    start_time_list = [i for i in start_time_list if i != ""]
-    need_menus = []                         # 時間を割きたい練習のみの番号リスト。ナップザック問題の石id
+    
+    # シートに並べた各パラメータを拾う
+    menu_name_list = df_up.iloc[:, 0].dropna(how='all').tolist()
+    members_name_list = df_up.iloc[:, 1].dropna(how='all').tolist()
+    start_time_list = df_up[2].dropna(how='all').tolist()
+
+    need_menus = []                         # 時間を割きたい練習のみの番号リスト。
     for i in range(len(menu_name_list)):
         need_menus.append(int(df_up.fillna(0).iat[i, 4]))
 
@@ -51,7 +50,7 @@ def read_df_up_sheet(file_path, date_id):
     # datedata = df_up.iat[3, 3]   # 日付と場所情報.出力用
     # participant = df_up.iat[4, 3]   # 参加者列挙.出力用
 
-             # 軸１　　軸２　　　　　軸３　　　軸３’　　表１vs3　表2vs1　　　o1        o2        p1      p2
+             # 軸１            　　軸２　　     　　　軸３　      　　軸３’ 　表１vs3　表2vs1　　　o1        o2        p1      p2
     return members_name_list, start_time_list, menu_name_list, need_menus, arr_N
 
 
@@ -62,9 +61,6 @@ def read_Form_Answer_sheet(file_path, week_id, date_id, members_name_list, start
 
     # 該当日のみを残す
     df_form_ans = cut_off_all_but_target_date(df_form_ans, date_id)
-
-    # 参加早退の空欄を参加→00:00と早退→23:59:00と埋める。ただし欠席は参加時刻＝早退時刻＝00:00とする。
-    df_form_ans =  fill_join_and_move_out_time(df_form_ans)
     
     # タイムスタンプが最新のものから30日より前のものは棄却
     last_ans = df_form_ans.at[len(df_form_ans.index)-1, "timestamp"]
@@ -74,6 +70,11 @@ def read_Form_Answer_sheet(file_path, week_id, date_id, members_name_list, start
     df_form_ans = df_form_ans.drop_duplicates(subset="name", keep="last")
     df_mem = pd.DataFrame(members_name_list).dropna(how="all").rename(columns={0:"name"})
     df_form_ans = pd.merge(df_mem, df_form_ans, on="name", how="left")
+
+    # 参加早退の空欄を参加→00:00と早退→23:59:00と埋める。ただし欠席は参加時刻＝早退時刻＝00:00とする。
+    df_form_ans =  fill_join_and_move_out_time(df_form_ans)
+
+    print(df_form_ans)
 
     # 練習時刻と出欠回答結果をすり合わせ、メンバーの出席簿array_Attendanceをまとめる
     arr_A = create_array_Attendance(df_form_ans, start_time_list, lesson_minuete)
@@ -86,7 +87,7 @@ def cut_off_all_but_target_date(df_form_ans, date_id):
     df_form_ans = df_form_ans[[0, 1, 3*date_index+2, 3*date_index+3, 3*date_index+4]]
     dic_col_form_ans = {0:"timestamp", 1:"name", 3*date_index+2:"At/Ab", 3*date_index+3:"join", 3*date_index+4:"move_out"}
     #                       0               1                       2                       3                         4
-    df_form_ans = df_form_ans.rename(columns=dic_col_form_ans)#{3*date_index+2: 2, 3*date_index+3: 3, 3*date_index+4: 4})
+    df_form_ans = df_form_ans.rename(columns=dic_col_form_ans)
     # 「タイムスタンプ、名前」などの1行目を切り、番号を0はじまりに直す
     df_form_ans = df_form_ans.drop(df_form_ans.index[[0]])
     df_form_ans = df_form_ans.set_axis(list(range(0, len(df_form_ans.index))), axis=0)
@@ -119,3 +120,4 @@ def create_array_Attendance(df_form_ans, start_time_list, lesson_minuete):
                 df_attend.iat[i, j] = 0
     arr_A = df_attend.values   # 出席簿配列
     return arr_A
+    

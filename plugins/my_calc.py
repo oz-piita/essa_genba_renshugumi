@@ -1,4 +1,6 @@
-'''bestpractice組合せ最適化'''
+'''bestpractice組合せ最適化
+RMシステムによる
+'''
 
 import pulp
 
@@ -15,6 +17,7 @@ class Param:
         self.place      = int(place)         # 制約式用の同時練習数int。
 
     def Calc(self, datedata, participant):
+        print("pulp version: ", pulp.__version__)
         # 前処理 
 
         member_num_list = list(range(1,len(self.members_name_list)+1))     # メンバーのキー番号リスト。Pulpは1から参照することが多い。
@@ -72,7 +75,7 @@ class Param:
         msg += ("練習は入りきりました！\n")
         msg += ("総練習人数は"+str(round(pulp.value(m.objective)))+"人"+"\n\n")
         msg += ("===========メニュー===========\n")
-        msg += (datedata+"\n"+ "参加者\n"+participant+"\n")
+        msg += (str(datedata)+"\n"+ "参加者\n"+str(participant)+"\n")
         t1 = 0
         j1 = 0
         for t in class_num_list:
@@ -114,7 +117,7 @@ class Param:
             for i in member_num_list:
                 if self.arr_A[t-1][i-1] == 1:
                     if pulp.value(pulp.lpSum(x[i][j][t] for j in menu_num_list)) == 0:
-                        msg += (self.members_name_list[i-1]+"　")
+                        msg += (str(self.members_name_list[i-1])+"　")
             msg += ("\n\n")
 
         return msg,infeasible

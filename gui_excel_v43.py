@@ -25,7 +25,7 @@ def Clac_Menu(file_path, date_id, overlap, place, bikou):
     # 一回目の計算
     message, failed = rm.Calc(date, participant)
 
-    # 2～5回の再計算。1回目が計算不可の場合に優先度の低いメニューを一つ削って再計算する
+    # 2～5回目の再計算。一つ前が計算不可の場合に優先度の低いメニューを一つ削って再計算する
     cnt = 0                 # 繰り返し計算カウント
     limit = 5               # 繰り返し計算回数の上限
     rejected_menus = []     # 計算から爪弾きにしたメニュー名のインデックス
@@ -34,7 +34,7 @@ def Clac_Menu(file_path, date_id, overlap, place, bikou):
             cnt += 1
             mx = max(rm.need_menus)
             for i, v in enumerate(rm.need_menus):
-                if v == mx:             # need_menusの最大値（優先順位最大5から下）を0に置き換える
+                if v == mx:             # need_menusの最大値（優先順位から下）を0に置き換える
                     rm.need_menus[i] = 0
                     rejected_menus.append(i)
                     break
@@ -50,19 +50,21 @@ def Clac_Menu(file_path, date_id, overlap, place, bikou):
         message += "やり直すならばK(被り人数許容上限)やW(同時練習許容上限)を大きくするか，練習するメニューを減らしてください"
         for i in range(cnt):
             nn = rejected_menus[i]
-            message += "\n棄却メニュー" + str(i+1)+"：" + rm.lessons[nn]
-        message /= "\n"
+            message += "\n棄却メニュー" + str(i+1)+"：" + rm.menu_name_list[nn]
+        message += "\n"
     elif cnt == limit and failed:
         message += "\nメニュー棄却（再計算）回数："+str(cnt)
         message += "\n計算回数の上限に達した."
         for i in range(cnt):
             nn = rejected_menus[i]
-            message += "\n棄却メニュー" + str(i+1)+"：" + rm.lessons[nn]
-        message = "\n"
+            message += "\n棄却メニュー" + str(i+1)+"：" + rm.menu_name_list[nn]
+        message += "\n"
     else:
-        message += "\nバグっています.システム担当者に連絡してください.\n"
+        message += "\nバグがあります.システム担当者に連絡してください.\n"
     
-    message += "\n" + bikou
+    print(cnt, failed, rejected_menus, message)
+
+    message += "\n備考: " + bikou
 
     text_kekka.insert(tk.END, message)
     return
@@ -106,7 +108,7 @@ Attend_sheet = tk.Entry(root,width=15)
 Attend_sheet.place(x=30,y=y2+20)
 Attend_sheet.insert(tk.END,"d1")
 
-# かぶり人数許容上限K＝３、同時練習許容上限W=５
+# かぶり人数許容上限K＝3、同時練習許容上限W=3
 label_K = tk.Label(root,text="かぶり人数許容上限K")
 label_K.place(x=30,y=y3)
 entry_K = tk.Entry(width=15)
