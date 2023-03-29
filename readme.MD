@@ -1,6 +1,6 @@
 # RMsystem version 4.3
 
-エッサの練習メニューを、組合せ最適化で計算するアプリです。
+エッサの練習メニューを、組合せ最適化で計算する内輪向けのアプリです。
 
 練習組みが大変な公演ならば、時間短縮効果が期待できます。
 
@@ -10,7 +10,7 @@
 
 バージョン4.3はPC向けGUIであり、実務上はWindowsOSでのexeファイルを使用することを想定しています。
 
-入力をGoogleスプレッドシートからダウンロードしたExcelファイルで行います。
+入力をGoogleスプレッドシートからダウンロードしたExcelファイルから行います。
 
 # Requirement
 
@@ -31,7 +31,7 @@ git clone https://github.com/oz-piita/essa_genba_renshugumi
 アプリケーションを起動します。
 
 ```bash
-python essa_genba_renshugumi/gui_excel_v43.py
+python essa_genba_renshugumi/main.py
 ```
 
 起動したら、ファイルの場所にダウンロードしたExcelを指定し、
@@ -39,16 +39,16 @@ python essa_genba_renshugumi/gui_excel_v43.py
 
 すると右の結果欄に計算結果が表示されます。
 
-# How to compile to .exe file
+# How to convert it into a .exe file with pyinstaller
 
 配布を容易にするために、pyintallerを使用してexe化する場合は、以下のコマンドを一行で実行してください。
 
 ```bash
-pyinstaller --noconfirm --onefile --console --add-data "C:/Users/.../Lib/site-packages/pulp;pulp/" "C:/Users/.../gui_excel_v43.py"
+pyinstaller --noconfirm --onefile --console --add-data "C:/Users/.../Lib/site-packages/pulp;pulp/" "C:/Users/.../main.py"
 ```
 2つのpahtは、前者が"pythonフォルダ内のpulpフォルダへのパス;実行ファイル保存先のパス"、"後者がこのアプリケーションのパス"です。
 
-Pythonフォルダ内のpulpフォルダへのパスは、以下のpythonコードを実行することでも確認できます。
+なお、Pythonフォルダ内のpulpフォルダへのパスは、以下のpythonコードを実行することでも確認できます。
 ```pyhon
 import pulp
 print(pulp.__path__[0])

@@ -1,11 +1,12 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import ttk
 import plugins.my_input as ip
 import plugins.my_calc as cl
 
 # 実行ボタンの関数
-def Clac_Menu(file_path, date_id, overlap, place, bikou):
+def Clac_Menu(text_kekka, file_path, date_id, overlap, place, bikou):
     # 結果欄をクリア
     text_kekka.delete('1.0',tk.END)
 
@@ -67,102 +68,101 @@ def Clac_Menu(file_path, date_id, overlap, place, bikou):
     text_kekka.insert(tk.END, message)
     return
 
-# ファイル選択用の関数
-def OpenFileDlgA(tbox):
-    Attend_path.delete(0,tk.END)
-    ftype =[("","*")]       #タプルのリスト
-    dir = "."
-    filename= filedialog.askopenfilename(filetypes=ftype,initialdir=dir)
-    tbox.insert(0,filename)
-
 # 以下GUIの静的な部分
+def main():
+    # Excel選択ラベル
+    label_1 = tk.Label(root,text="Excelファイル")
+    label_1.place(x=30,y=y1)
+    Attend_path = tk.Entry(root,width=35)
+    Attend_path.place(x=30,y=y1+20)
+    fdlg_button = tk.Button(root,text="ファイル選択",command=lambda:OpenFileDlgA(Attend_path))
+    fdlg_button.place(x=250,y=y1+20)
+    # ファイル選択用の関数
+    def OpenFileDlgA(tbox):
+        Attend_path.delete(0,tk.END)
+        ftype =[("","*")]       #タプルのリスト
+        dir = "."
+        filename= filedialog.askopenfilename(filetypes=ftype,initialdir=dir)
+        tbox.insert(0,filename)
 
-root= tk.Tk()
-root.title("練習組みシステム")
-root.geometry("800x300")
+    # 日付d1記入欄
+    label_1 = tk.Label(root,text="日付ID")
+    label_1.place(x=30,y=y2)
+    module = ("d1", "d2","d3","d4","d5","d6","d7")
+    date_combobox = ttk.Combobox(root, values=module)
+    date_combobox.place(x=30,y=y2+20)
+    date_combobox.insert(tk.END,"d1")
 
-# ボックスのデフォルト値
-k_initial = 3
-w_initial = 3
 
-# ボックスの表示位置
-y1=10
-y2=70
-y3=130
-y4=190
-y5=260
-
-# Excel選択ラベル
-label_1 = tk.Label(root,text="Excelファイル")
-label_1.place(x=30,y=y1)
-Attend_path = tk.Entry(root,width=35)
-Attend_path.place(x=30,y=y1+20)
-fdlg_button = tk.Button(root,text="ファイル選択",command=lambda:OpenFileDlgA(Attend_path))
-fdlg_button.place(x=250,y=y1+20)
-
-label_1 = tk.Label(root,text="日付ID")
-label_1.place(x=30,y=y2)
-Attend_sheet = tk.Entry(root,width=15)
-Attend_sheet.place(x=30,y=y2+20)
-Attend_sheet.insert(tk.END,"d1")
-
-# かぶり人数許容上限K＝3、同時練習許容上限W=3
-label_K = tk.Label(root,text="かぶり人数許容上限K")
-label_K.place(x=30,y=y3)
-entry_K = tk.Entry(width=15)
-entry_K.place(x=30,y=y3+20)
-entry_K.insert(tk.END,k_initial)
-label_W = tk.Label(root,text="同時練習許容上限W")
-label_W.place(x=200,y=y3)
-entry_W = tk.Entry(width=15)
-entry_W.place(x=200,y=y3+20)
-entry_W.insert(tk.END,w_initial)
-
-# Slackチェックボタン
-# bln = tk.BooleanVar()
-# bln.set(False)
-# chk1 = tk.Checkbutton(root, variable=bln,text="Slackへ送信")
-# chk1.place(x=30,y=y5)
-
-# 実行ボタン
-calc_button = tk.Button(root,text="実行",command=lambda:Clac_Menu(Attend_path.get(), Attend_sheet.get(), entry_K.get(), entry_W.get(), entry_bikou.get()))# bln.get()))
-calc_button.place(x=150,y=y5)
-
-# リセットボタン
-reset_button =tk.Button(root,text="リセット",command=lambda:ClearAll())
-reset_button.place(x=650,y=y5)
-def ClearAll():
-    text_kekka.delete('1.0',tk.END)
-    entry_bikou.delete(0,tk.END)
-    Attend_path.delete(0,tk.END)
-    # Need_path.delete(0,tk.END)
-    Attend_sheet.delete(0,tk.END)
-    Attend_sheet.insert(tk.END,"d1")
-    # Need_sheet.delete(0,tk.END)
-    # Need_sheet.insert(tk.END,"d1")
-    entry_K.delete(0,tk.END)
-    entry_W.delete(0,tk.END)
+    # かぶり人数許容上限K＝3、同時練習許容上限W=3
+    label_K = tk.Label(root,text="かぶり人数許容上限K")
+    label_K.place(x=30,y=y3)
+    entry_K = tk.Entry(width=15)
+    entry_K.place(x=30,y=y3+20)
     entry_K.insert(tk.END,k_initial)
+    label_W = tk.Label(root,text="同時練習許容上限W")
+    label_W.place(x=200,y=y3)
+    entry_W = tk.Entry(width=15)
+    entry_W.place(x=200,y=y3+20)
     entry_W.insert(tk.END,w_initial)
+
+    # Slackチェックボタン
+    # bln = tk.BooleanVar()
     # bln.set(False)
+    # chk1 = tk.Checkbutton(root, variable=bln,text="Slackへ送信")
+    # chk1.place(x=30,y=y5)
 
-# 閉じるボタン
-close_button =tk.Button(root,text="閉じる",command=lambda:DoExit())
-close_button.place(x=730,y=y5)
-# 閉じるcallback
-def DoExit():
-    root.destroy()
+    # 実行ボタン
+    calc_button = tk.Button(root,text="実行",command=lambda:Clac_Menu(text_kekka, Attend_path.get(), date_combobox.get(), entry_K.get(), entry_W.get(), entry_bikou.get()))# bln.get()))
+    calc_button.place(x=150,y=y5)
 
-# 備考欄エントリー
-label_bikou = tk.Label(root,text="備考")
-label_bikou.place(x=30,y=y4)
-entry_bikou = tk.Entry(root,width=50)
-entry_bikou.place(x=30,y=y4+20)
+    # リセットボタン
+    reset_button =tk.Button(root,text="リセット",command=lambda:ClearAll())
+    reset_button.place(x=650,y=y5)
+    # リセットボタン関数
+    def ClearAll():
+        text_kekka.delete('1.0',tk.END)
+        entry_bikou.delete(0,tk.END)
+        Attend_path.delete(0,tk.END)
+        date_combobox.delete(0,tk.END)
+        date_combobox.insert(tk.END,"d1")
+        entry_K.delete(0,tk.END)
+        entry_W.delete(0,tk.END)
+        entry_K.insert(tk.END,k_initial)
+        entry_W.insert(tk.END,w_initial)
+        # bln.set(False)
 
-# 出力結果
-label_1 = tk.Label(root,text="出力結果")
-label_1.place(x=430,y=y1)
-text_kekka = tk.Text(root,width=50,height=15)
-text_kekka.place(x=430,y=y1+20)
+    # 閉じるボタン
+    close_button =tk.Button(root,text="閉じる",command=lambda:DoExit())
+    close_button.place(x=730,y=y5)
+    # 閉じる
+    def DoExit():
+        root.destroy()
 
-root.mainloop()
+    # 備考欄エントリー
+    label_bikou = tk.Label(root,text="備考")
+    label_bikou.place(x=30,y=y4)
+    entry_bikou = tk.Entry(root,width=50)
+    entry_bikou.place(x=30,y=y4+20)
+
+    # 出力結果
+    label_1 = tk.Label(root,text="出力結果")
+    label_1.place(x=430,y=y1)
+    text_kekka = tk.Text(root,width=50,height=15)
+    text_kekka.place(x=430,y=y1+20)
+
+if __name__=="__main__":
+    root = tk.Tk()    
+    root.title("練習組みシステム")
+    root.geometry("800x300")
+    # ボックスのデフォルト値
+    k_initial = 3
+    w_initial = 3
+    # ボックスの表示位置
+    y1=10
+    y2=70
+    y3=130
+    y4=190
+    y5=260
+    main()
+    root.mainloop()
