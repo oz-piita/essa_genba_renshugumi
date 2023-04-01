@@ -6,7 +6,7 @@ import plugins.my_input as ip
 import plugins.my_calc as cl
 
 # 実行ボタンの関数
-def Clac_Menu(text_kekka, file_path, date_id, overlap, place, bikou):
+def calc_menu(text_kekka, file_path, date_id, overlap, place, bikou):
     # 結果欄をクリア
     text_kekka.delete('1.0',tk.END)
 
@@ -73,13 +73,13 @@ def main():
     # Excel選択ラベル
     label_1 = tk.Label(root,text="Excelファイル")
     label_1.place(x=30,y=y1)
-    Attend_path = tk.Entry(root,width=35)
-    Attend_path.place(x=30,y=y1+20)
-    fdlg_button = tk.Button(root,text="ファイル選択",command=lambda:OpenFileDlgA(Attend_path))
+    excel_file_path = tk.Entry(root,width=35)
+    excel_file_path.place(x=30,y=y1+20)
+    fdlg_button = tk.Button(root,text="ファイル選択",command=lambda:OpenFileDlgA(excel_file_path))
     fdlg_button.place(x=250,y=y1+20)
     # ファイル選択用の関数
     def OpenFileDlgA(tbox):
-        Attend_path.delete(0,tk.END)
+        excel_file_path.delete(0,tk.END)
         ftype =[("","*")]       #タプルのリスト
         dir = "."
         filename= filedialog.askopenfilename(filetypes=ftype,initialdir=dir)
@@ -113,7 +113,7 @@ def main():
     # chk1.place(x=30,y=y5)
 
     # 実行ボタン
-    calc_button = tk.Button(root,text="実行",command=lambda:Clac_Menu(text_kekka, Attend_path.get(), date_combobox.get(), entry_K.get(), entry_W.get(), entry_bikou.get()))# bln.get()))
+    calc_button = tk.Button(root,text="実行",command=lambda:calc_menu(text_kekka, excel_file_path.get(), date_combobox.get(), entry_K.get(), entry_W.get(), entry_bikou.get()))# bln.get()))
     calc_button.place(x=150,y=y5)
 
     # リセットボタン
@@ -123,7 +123,7 @@ def main():
     def ClearAll():
         text_kekka.delete('1.0',tk.END)
         entry_bikou.delete(0,tk.END)
-        Attend_path.delete(0,tk.END)
+        excel_file_path.delete(0,tk.END)
         date_combobox.delete(0,tk.END)
         date_combobox.insert(tk.END,"d1")
         entry_K.delete(0,tk.END)

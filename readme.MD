@@ -1,6 +1,8 @@
 # RMsystem version 4.3
 
-エッサの練習メニューを、組合せ最適化で計算する内輪向けのアプリです。
+エッサの練習メニューを、組合せ最適化で計算するアプリです。
+
+内輪向けです。
 
 練習組みが大変な公演ならば、時間短縮効果が期待できます。
 
@@ -8,9 +10,11 @@
 
 # Features
 
-バージョン4.3はPC向けGUIであり、実務上はWindowsOSでのexeファイルを使用することを想定しています。
+バージョン4.3はPC向けGUIです。
 
-入力をGoogleスプレッドシートからダウンロードしたExcelファイルから行います。
+実務上はWindowsOSでのexeファイルを使用することを想定しています。
+
+入力を例のGoogleスプレッドシートからダウンロードしたExcelファイルから行います。
 
 # Requirement
 
@@ -22,13 +26,14 @@
 
 # Usage(test)
 
-Requirementのうち、pulpは標準パッケージに含まれませんので、先にインストールしてください。
+Requirementのうち、pulpはPython標準パッケージに含まれません。先にインストールしてください。
 
-実行方法は以下です。
+適当なフォルダに移動してクローン。
 ```bash
 git clone https://github.com/oz-piita/essa_genba_renshugumi
 ```
-アプリケーションを起動します。
+
+そしてアプリケーションを起動します。
 
 ```bash
 python essa_genba_renshugumi/main.py
@@ -54,17 +59,17 @@ import pulp
 print(pulp.__path__[0])
 ```
 
-こちらを参考にしています。
+exe化はこちらを参考にしています。
 
 https://stackoverflow.com/questions/60926887/py-project-works-but-pyinstaller-gives-error-related-to-pulp
 
 # Note
 
-核になっている組合せ最適化処理はplugins/my_calcファイルにモジュール化されています。
+核になっている組合せ最適化処理はplugins/my_calc.pyファイルにモジュール化されています。
 
 最適化を試験したいときは、calcのオブジェクトに適合するようデータを加工して食わせてください。
 
-データ加工はmy_inputを参考にしてください。
+データ加工はmy_input.pyを参考にしてください。
 
 # Author
 
